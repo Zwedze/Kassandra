@@ -3,6 +3,8 @@ The goal of this library is to provide the same interface to different kind of c
 ## Class explanations
 ### IContext
 The abstration of the database. This interface extends IQueryBuilder so that an IContext instance can return an IQuery object.
+#### IContextFactory
+Each Connector package contains a factory. The namespace of the connectors factory is always defined as follow : Kassandra.Connector.*TYPE*.Factories. (eg: Kassandra.Connector.Sql.Factories.SqlContextFactory). Those factories are singletons factories so use the static approach to use them.
 ### Queries interfaces
 #### IQuery
 This interface is built using 'fluent' approach. 
@@ -19,6 +21,16 @@ Note that the **Error** method is used in the *catch(Exception)* regardless the 
 
 **ExecuteNonQuery** will send the query and will not return a result.
 
+#### IResultQuery
+This interface extends the IQuery interface and add methods used in an 'output' context.
+
+**UseCache** will check in the cache if the provided cacheKey exists and use its content as direct result whitout calling the database behind the query. A cache duration can be defined using a *Timespan*
+**Mapper** defines the mapper used when an item is cast from a **IResultReader** to an output type.
+
+A mapper **must** be defined in an IResultQuery, otherwise an Exception is throwed and the query will fail.
+
+**QueryMany**, **QuerySingle**, **QueryScalar** will send the query and return the result using the IMapper item defined from the **Mapper** command.
+
 ## Usage
 In the examples below I will illustrate how to use the framework in different situation
 ### Queries samples
@@ -30,7 +42,7 @@ public class MonsterManager
 
 	public MonsterManager(string connectionString)
 	{
-		_context = **SqlContextFactory.Instance.**GetContext(connectionString);
+		_context = **Kassandra.Connector.Sql.Factories.SqlContextFactory.Instance.**GetContext(connectionString);
 	}
 
 	public IList<Monster> GetAll()
