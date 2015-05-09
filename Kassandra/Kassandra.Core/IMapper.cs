@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Kassandra.Core.Interfaces
+namespace Kassandra.Core
 {
     public interface IMapper<TOutput>
     {

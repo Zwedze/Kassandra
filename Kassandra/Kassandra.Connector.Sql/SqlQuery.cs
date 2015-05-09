@@ -2,10 +2,10 @@
 using System.Data;
 using Common.Logging;
 using Kassandra.Core;
-using Kassandra.Core.Interfaces;
+using Kassandra.Core.Components;
 using Kassandra.Core.Models.Query;
 
-namespace Kassandra.Connector.Sql.Implementation
+namespace Kassandra.Connector.Sql
 {
     internal class SqlQuery : BaseQuery
     {

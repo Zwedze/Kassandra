@@ -1,8 +1,8 @@
 ﻿using System.Data;
 using Common.Logging;
-using Kassandra.Core.Interfaces;
+using Kassandra.Core;
 
-namespace Kassandra.Connector.Sql.Implementation
+namespace Kassandra.Connector.Sql
 {
     internal class SqlTransaction : ITransaction, IDbTransaction
     {

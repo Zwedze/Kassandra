@@ -2,35 +2,37 @@
 using System.Collections.Generic;
 using System.Runtime.Caching;
 using Kassandra.Core;
-using Kassandra.Core.Interfaces;
 using Kassandra.Core.Models.Query;
 
-namespace Kassandra.Connector.Sql.Implementation
+namespace Kassandra.Connector.Sql
 {
     internal class SqlResultQuery<TOutput> : SqlQuery, IResultQuery<TOutput>
     {
         private readonly ICacheRepository _cacheRepository;
         private TimeSpan _cacheDuration;
         private string _cacheKey;
-        private CacheItemPriority _cachePriority;
         private IMapper<TOutput> _mapper;
 
         public SqlResultQuery(SqlConnection connection, string query, bool isStoredProcedure,
             ICacheRepository cacheRepository)
             : base(connection, query, isStoredProcedure)
         {
-            _mapper = new StubMapper<TOutput>();
+            // _mapper = new StubMapper<TOutput>();
             _cacheKey = null;
             _cacheDuration = default(TimeSpan);
             _cacheRepository = cacheRepository;
         }
 
-        public IResultQuery<TOutput> UseCache(string cacheKey, TimeSpan duration,
-            CacheItemPriority cachePriority = CacheItemPriority.Default)
+        public new IResultQuery<TOutput> MustCatchExceptions()
+        {
+            CatchExceptions = true;
+            return this;
+        }
+
+        public IResultQuery<TOutput> UseCache(string cacheKey, TimeSpan duration)
         {
             _cacheKey = cacheKey;
             _cacheDuration = duration;
-            _cachePriority = cachePriority;
 
             return this;
         }
@@ -50,6 +52,11 @@ namespace Kassandra.Connector.Sql.Implementation
 
         public IList<TOutput> QueryMany()
         {
+            if (_mapper == null)
+            {
+                throw new ArgumentException("No IMapper defined");
+            }
+
             if (!string.IsNullOrWhiteSpace(_cacheKey))
             {
                 var output = _cacheRepository.GetEntry<IList<TOutput>>(_cacheKey);
@@ -69,7 +76,7 @@ namespace Kassandra.Connector.Sql.Implementation
 
                 if (!string.IsNullOrWhiteSpace(_cacheKey))
                 {
-                    _cacheRepository.Insert(_cacheKey, output, _cacheDuration, _cachePriority);
+                    _cacheRepository.Insert(_cacheKey, output, _cacheDuration, CacheItemPriority.Default);
                 }
 
                 return output;
@@ -91,6 +98,11 @@ namespace Kassandra.Connector.Sql.Implementation
 
         public TOutput QuerySingle()
         {
+            if (_mapper == null)
+            {
+                throw new ArgumentException("No IMapper defined");
+            }
+
             OpenConnection();
             try
             {

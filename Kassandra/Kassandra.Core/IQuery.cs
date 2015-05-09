@@ -2,14 +2,14 @@
 using Common.Logging;
 using Kassandra.Core.Models.Query;
 
-namespace Kassandra.Core.Interfaces
+namespace Kassandra.Core
 {
     public interface IQuery
     {
-        //ITransaction Transaction { get; set; }
-        bool CatchExceptions { get; set; }
         string CommandeName { get; set; }
         ILog Logger { get; }
+        //ITransaction Transaction { get; set; }
+        IQuery MustCatchExceptions();
         IQuery Parameter(string parameterName, object parameterValue);
         void ExecuteNonQuery();
         IQuery Error(Action<QueryErrorEventArgs> args);

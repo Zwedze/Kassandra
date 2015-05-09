@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kassandra.Core.Interfaces
+namespace Kassandra.Core
 {
     public interface IConnection : IDisposable
     {

@@ -1,6 +1,6 @@
-﻿using Kassandra.Connector.Sql.Implementation;
+﻿using Kassandra.Connector.Sql;
 using Kassandra.Core;
-using Kassandra.Core.Interfaces;
+using Kassandra.Core.Components;
 
 namespace Kassandra.Connector.Sql.Factories
 {
@@ -13,7 +13,7 @@ namespace Kassandra.Connector.Sql.Factories
             get { return _instance ?? (_instance = new SqlContextFactory()); }
         }
 
-        public IDataContext GetContext(string connectionString)
+        public IContext GetContext(string connectionString)
         {
             return new SqlDatabase(connectionString, new CachedRepository());
         }

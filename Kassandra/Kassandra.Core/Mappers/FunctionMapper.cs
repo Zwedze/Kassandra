@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Kassandra.Core.Interfaces;
 
 namespace Kassandra.Core.Mappers
 {

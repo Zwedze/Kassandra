@@ -49,12 +49,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factories\SqlContextFactory.cs" />
-    <Compile Include="Implementation\SqlConnection.cs" />
-    <Compile Include="Implementation\SqlDatabase.cs" />
-    <Compile Include="Implementation\SqlDataReader.cs" />
-    <Compile Include="Implementation\SqlQuery.cs" />
-    <Compile Include="Implementation\SqlResultQuery.cs" />
-    <Compile Include="Implementation\SqlTransaction.cs" />
+    <Compile Include="SqlConnection.cs" />
+    <Compile Include="SqlDatabase.cs" />
+    <Compile Include="SqlDataReader.cs" />
+    <Compile Include="SqlQuery.cs" />
+    <Compile Include="SqlResultQuery.cs" />
+    <Compile Include="SqlTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

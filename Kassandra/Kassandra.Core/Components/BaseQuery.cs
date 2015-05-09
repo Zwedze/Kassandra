@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Text;
 using Common.Logging;
-using Kassandra.Core.Interfaces;
 using Kassandra.Core.Models.Query;
 
-namespace Kassandra.Core
+namespace Kassandra.Core.Components
 {
     public abstract class BaseQuery : IQuery
     {
@@ -18,9 +17,18 @@ namespace Kassandra.Core
             OnQueryExecuted += GenericQueryExecuted;
             OnConnectionClosing += GenericConnectionClosing;
             OnConnectionClosed += GenericConnectionClosed;
+
+            CatchExceptions = false;
         }
 
-        public bool CatchExceptions { get; set; }
+        protected bool CatchExceptions { get; set; }
+
+        public IQuery MustCatchExceptions()
+        {
+            CatchExceptions = true;
+            return this;
+        }
+
         public string CommandeName { get; set; }
         //public abstract ITransaction Transaction { get; set; }
         public abstract ILog Logger { get; protected set; }

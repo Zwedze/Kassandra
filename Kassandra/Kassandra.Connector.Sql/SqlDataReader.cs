@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Data;
-using Kassandra.Core.Interfaces;
+using Kassandra.Core;
 
-namespace Kassandra.Connector.Sql.Implementation
+namespace Kassandra.Connector.Sql
 {
     internal class SqlDataReader : IResultReader
     {

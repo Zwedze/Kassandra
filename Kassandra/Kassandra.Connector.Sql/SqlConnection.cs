@@ -1,7 +1,7 @@
 ﻿using System.Data;
-using Kassandra.Core.Interfaces;
+using Kassandra.Core;
 
-namespace Kassandra.Connector.Sql.Implementation
+namespace Kassandra.Connector.Sql
 {
     public class SqlConnection : IConnection, IDbConnection
     {

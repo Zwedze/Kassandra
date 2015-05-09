@@ -1,7 +1,7 @@
 ﻿using Kassandra.Core;
-using Kassandra.Core.Interfaces;
+using Kassandra.Core.Components;
 
-namespace Kassandra.Connector.Sql.Implementation
+namespace Kassandra.Connector.Sql
 {
     internal class SqlDatabase : BaseDatabase
     {

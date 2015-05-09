@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Runtime.Caching;
-using Kassandra.Core.Interfaces;
 
-namespace Kassandra.Core
+namespace Kassandra.Core.Components
 {
     public class CachedRepository : ICacheRepository
     {

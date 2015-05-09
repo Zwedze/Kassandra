@@ -1,4 +1,4 @@
-﻿namespace Kassandra.Core.Interfaces
+﻿namespace Kassandra.Core
 {
     public interface IConnectionProvider
     {
