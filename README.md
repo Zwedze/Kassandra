@@ -1,5 +1,20 @@
 # Kassandra
 The goal of this library is to provide the same interface to different kind of connectors (SQL only for the moment. MongoDB, Redis, MySQL, Oracle in progress)
+## Class explanations
+### IContext
+The abstration of the database. This interface extends IQueryBuilder so that an IContext instance can return an IQuery object.
+### Queries interfaces
+#### IQuery
+This interface is built using 'fluent' approach. 
+
+The *Parameter("", o)* method defines a parameter of the query item.
+
+If *MustCatchExceptions*() is invoked, all exceptions throwed in the query execution path will be catched and no information will be available for tracing and debuging. **To log the error throwed, use the *Error()* method as used in the MonsterManager.GetAll example above**.
+
+*ConnectionOpening*, *ConnectionOpened*, *ConnectionClosing*, *ConnectionClosed*, *QueryExecuting*, *QueryExecuted* and *Error* methods are event handlers that can be defined to do a specific job at a specific moment. **Note that** the *Error* method is used in the *catch(Exception)* claused whatever *MustCatchExceptions* had been invoked.
+
+*ExecuteNonQuery* will send the query and will not return a result.
+
 ## Usage
 In the examples below I will illustrate how to use the framework in different situation
 ### Queries samples
@@ -76,14 +91,3 @@ public class MonsterManager
 }
 
 ```
-
-## Class explanations
-### IContext
-The abstration of the database. This interface extends IQueryBuilder so that an IContext instance can return an IQuery object.
-### Queries interfaces
-#### IQuery
-This interface is built using 'fluent' approach. 
-The *Parameter("", o)* method defines a parameter of the query item.
-If *MustCatchExceptions*() is invoked, all exceptions throwed in the query execution path will be catched and no information will be available for tracing and debuging. **To log the error throwed, use the *Error()* method as used in the MonsterManager.GetAll example above.
-*ConnectionOpening*, *ConnectionOpened*, *ConnectionClosing*, *ConnectionClosed*, *QueryExecuting*, *QueryExecuted* and *Error* methods are event handlers that can be defined to do a specific job at a specific moment. **Note that** the *Error* method is used in the *catch(Exception)* claused whatever *MustCatchExceptions* had been invoked.
-*ExecuteNonQuery* will send the query and will not return a result.
