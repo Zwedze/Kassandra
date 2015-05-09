@@ -1,7 +1,7 @@
 # Nuget
 Core : https://www.nuget.org/packages/Kassandra.Core/
-SQL Connector : https://www.nuget.org/packages/Kassandra.Connector.Sql/
 
+SQL Connector : https://www.nuget.org/packages/Kassandra.Connector.Sql/
 
 # Kassandra
 The goal of this library is to provide the same interface to different kind of connectors (SQL only for the moment. MongoDB, Redis, MySQL, Oracle in progress)
