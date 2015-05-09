@@ -7,9 +7,9 @@ namespace Kassandra.Core.Components
 {
     public abstract class BaseQuery : IQuery
     {
-        protected BaseQuery(string query)
+        protected BaseQuery(string commandName)
         {
-            Query = query;
+            CommandeName = commandName;
             OnError += GenericError;
             OnConnectionOpening += GenericConnectionOpening;
             OnConnectionOpened += GenericConnectionOpened;
@@ -29,7 +29,7 @@ namespace Kassandra.Core.Components
             return this;
         }
 
-        public string Query { get; set; }
+        public string CommandeName { get; set; }
         //public abstract ITransaction Transaction { get; set; }
         public abstract ILog Logger { get; protected set; }
         public abstract IQuery Parameter(string parameterName, object parameterValue);
@@ -141,7 +141,7 @@ namespace Kassandra.Core.Components
 
         private void GenericQueryExecuting(QueryExecutionEventArgs args)
         {
-            Logger.Trace(string.Format("Executing query {0}", args.Query.Query));
+            Logger.Trace(string.Format("Executing query {0}", args.Query.CommandeName));
         }
 
         #endregion
@@ -161,7 +161,7 @@ namespace Kassandra.Core.Components
 
         private void GenericQueryExecuted(QueryExecutionEventArgs args)
         {
-            Logger.Trace(string.Format("Executed query {0}", args.Query.Query));
+            Logger.Trace(string.Format("Executed query {0}", args.Query.CommandeName));
         }
 
         public IQuery QueryExecuted(Action<QueryExecutionEventArgs> action)
