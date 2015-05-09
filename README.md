@@ -7,11 +7,15 @@ The abstration of the database. This interface extends IQueryBuilder so that an 
 #### IQuery
 This interface is built using 'fluent' approach. 
 
-The **Parameter** method defines a parameter of the query item.
+**Parameter** method defines a parameter of the query item.
 
-If **MustCatchExceptions** is invoked, all exceptions throwed in the query execution path will be catched and no information will be available for tracing and debuging. **To log the error throwed, use the *Error* method as used in the MonsterManager.GetAll example above**.
+**MustCatchExceptions** can be invoked. When used all exceptions throwed in the query execution path will be catched and no information will be available for tracing and debuging. 
 
-**ConnectionOpening**, **ConnectionOpened**, **ConnectionClosing**, **ConnectionClosed**, **QueryExecuting**, **QueryExecuted** and **Error** methods are event handlers that can be defined to do a specific job at a specific moment. **Note that** the **Error** method is used in the *catch(Exception)* regardless the **MustCatchExceptions** invokation in the query building.
+To log the error throwed, use the *Error* method as used in the MonsterManager.GetAll example above.
+
+**ConnectionOpening**, **ConnectionOpened**, **ConnectionClosing**, **ConnectionClosed**, **QueryExecuting**, **QueryExecuted** and **Error** methods are event handlers that can be defined to do a specific job at a specific moment. 
+
+Note that the **Error** method is used in the *catch(Exception)* regardless the **MustCatchExceptions** invokation in the query building.
 
 **ExecuteNonQuery** will send the query and will not return a result.
 
