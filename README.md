@@ -4,7 +4,7 @@ Core : https://www.nuget.org/packages/Kassandra.Core/
 SQL Connector : https://www.nuget.org/packages/Kassandra.Connector.Sql/
 
 # Kassandra
-The goal of this library is to provide the same interface to different kind of connectors (SQL only for the moment. MongoDB, Redis, MySQL, Oracle in progress)
+The goal of this library is to provide the same interface to different kind of connectors (SQL only for the moment. MySQL, Oracle in progress)
 ## Class explanations
 ### IContext
 The abstration of the database. This interface extends IQueryBuilder so that an IContext instance can return an IQuery object.
