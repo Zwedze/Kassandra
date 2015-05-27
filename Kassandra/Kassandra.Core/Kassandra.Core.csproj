@@ -51,6 +51,9 @@
     <Compile Include="Components\BaseDatabase.cs" />
     <Compile Include="Components\BaseQuery.cs" />
     <Compile Include="Components\CachedRepository.cs" />
+    <Compile Include="Components\ExpressionMapper.cs" />
+    <Compile Include="Components\LambdaExtension.cs" />
+    <Compile Include="Components\MappingItem.cs" />
     <Compile Include="ICacheRepository.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="IConnectionProvider.cs" />

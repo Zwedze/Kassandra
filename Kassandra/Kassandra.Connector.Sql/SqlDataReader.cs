@@ -33,6 +33,26 @@ namespace Kassandra.Connector.Sql
             return (T) _dataReader[columnNumber];
         }
 
+        public dynamic ValueAs(Type type, string parameterName)
+        {
+            if (_dataReader[parameterName] == DBNull.Value)
+            {
+                return default(dynamic);
+            }
+
+            return _dataReader[parameterName];
+        }
+
+        public dynamic ValueAs(Type type, int columnNumber)
+        {
+            if (_dataReader[columnNumber] == DBNull.Value)
+            {
+                return default(dynamic);
+            }
+
+            return _dataReader[columnNumber];
+        }
+
         public bool Read()
         {
             return _dataReader.Read();
