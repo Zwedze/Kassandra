@@ -191,3 +191,4 @@ ModelManifest.xml
 Kassandra/packages/
 *.bat
 *.nupkg
+Kassandra/Kassandra.Connector.Sql.Test/App.config
