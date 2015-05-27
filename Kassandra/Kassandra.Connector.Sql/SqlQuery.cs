@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using Common.Logging;
 using Kassandra.Core;
@@ -10,6 +11,7 @@ namespace Kassandra.Connector.Sql
     internal class SqlQuery : BaseQuery
     {
         private readonly SqlConnection _connection;
+        protected IDictionary<string, object> Parameters { get; private set; }
 
         public SqlQuery(SqlConnection connection, string query, bool isStoredProcedure) : base(query)
         {
@@ -22,6 +24,8 @@ namespace Kassandra.Connector.Sql
             {
                 Command.CommandType = CommandType.StoredProcedure;
             }
+
+            Parameters = new Dictionary<string, object>();
         }
 
         public IDbCommand Command { get; private set; }
@@ -29,10 +33,12 @@ namespace Kassandra.Connector.Sql
 
         public override IQuery Parameter(string parameterName, object parameterValue)
         {
-            var parameter = Command.CreateParameter();
+            IDbDataParameter parameter = Command.CreateParameter();
             parameter.ParameterName = parameterName;
             parameter.Value = parameterValue;
             Command.Parameters.Add(parameter);
+
+            Parameters.Add(parameterName, parameterValue);
 
             return this;
         }
