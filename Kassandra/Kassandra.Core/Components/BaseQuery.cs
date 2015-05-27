@@ -32,7 +32,7 @@ namespace Kassandra.Core.Components
         public string Query { get; set; }
         //public abstract ITransaction Transaction { get; set; }
         public abstract ILog Logger { get; protected set; }
-        public abstract IQuery Parameter(string parameterName, object parameterValue);
+        public abstract IQuery Parameter(string parameterName, object parameterValue, bool condition = true);
         public abstract void ExecuteNonQuery();
 
         #region Events

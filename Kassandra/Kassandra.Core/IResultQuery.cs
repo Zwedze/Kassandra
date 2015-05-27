@@ -8,7 +8,7 @@ namespace Kassandra.Core
     {
         IResultQuery<TOutput> UseCache(string cacheKey = null, TimeSpan? duration = null);
         IResultQuery<TOutput> Mapper(IMapper<TOutput> mapper);
-        new IResultQuery<TOutput> Parameter(string parameterName, object parameterValue);
+        new IResultQuery<TOutput> Parameter(string parameterName, object parameterValue, bool condition = true);
         new IResultQuery<TOutput> Error(Action<QueryErrorEventArgs> args);
         new IResultQuery<TOutput> ConnectionOpening(Action<OpenConnectionEventArgs> args);
         new IResultQuery<TOutput> ConnectionOpened(Action<OpenConnectionEventArgs> args);

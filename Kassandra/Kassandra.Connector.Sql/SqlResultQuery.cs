@@ -44,9 +44,9 @@ namespace Kassandra.Connector.Sql
             return this;
         }
 
-        public new IResultQuery<TOutput> Parameter(string parameterName, object parameterValue)
+        public new IResultQuery<TOutput> Parameter(string parameterName, object parameterValue, bool condition = true)
         {
-            base.Parameter(parameterName, parameterValue);
+            base.Parameter(parameterName, parameterValue, condition);
 
             return this;
         }

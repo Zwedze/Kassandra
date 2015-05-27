@@ -31,8 +31,13 @@ namespace Kassandra.Connector.Sql
         public IDbCommand Command { get; private set; }
         public override sealed ILog Logger { get; protected set; }
 
-        public override IQuery Parameter(string parameterName, object parameterValue)
+        public override IQuery Parameter(string parameterName, object parameterValue, bool condition = true)
         {
+            if (!condition)
+            {
+                return this;
+            }
+
             IDbDataParameter parameter = Command.CreateParameter();
             parameter.ParameterName = parameterName;
             parameter.Value = parameterValue;

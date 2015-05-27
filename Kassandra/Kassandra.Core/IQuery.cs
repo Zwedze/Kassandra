@@ -7,7 +7,7 @@ namespace Kassandra.Core
     {
         string Query { get; set; }
         IQuery MustCatchExceptions();
-        IQuery Parameter(string parameterName, object parameterValue);
+        IQuery Parameter(string parameterName, object parameterValue, bool condition = true);
         void ExecuteNonQuery();
         IQuery Error(Action<QueryErrorEventArgs> args);
         IQuery ConnectionOpening(Action<OpenConnectionEventArgs> args);
