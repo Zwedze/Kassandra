@@ -6,7 +6,7 @@ namespace Kassandra.Core
 {
     public interface IResultQuery<TOutput> : IQuery
     {
-        IResultQuery<TOutput> UseCache(string cacheKey, TimeSpan duration);
+        IResultQuery<TOutput> UseCache(string cacheKey = null, TimeSpan? duration = null);
         IResultQuery<TOutput> Mapper(IMapper<TOutput> mapper);
         new IResultQuery<TOutput> Parameter(string parameterName, object parameterValue);
         new IResultQuery<TOutput> Error(Action<QueryErrorEventArgs> args);

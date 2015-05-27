@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Caching;
+using System.Data;
 using Kassandra.Core;
 using Kassandra.Core.Models.Query;
 
@@ -9,7 +9,7 @@ namespace Kassandra.Connector.Sql
     internal class SqlResultQuery<TOutput> : SqlQuery, IResultQuery<TOutput>
     {
         private readonly ICacheRepository _cacheRepository;
-        private TimeSpan _cacheDuration;
+        private TimeSpan? _cacheDuration;
         private string _cacheKey;
         private IMapper<TOutput> _mapper;
 
@@ -17,9 +17,6 @@ namespace Kassandra.Connector.Sql
             ICacheRepository cacheRepository)
             : base(connection, query, isStoredProcedure)
         {
-            // _mapper = new StubMapper<TOutput>();
-            _cacheKey = null;
-            _cacheDuration = default(TimeSpan);
             _cacheRepository = cacheRepository;
         }
 
@@ -29,7 +26,7 @@ namespace Kassandra.Connector.Sql
             return this;
         }
 
-        public IResultQuery<TOutput> UseCache(string cacheKey, TimeSpan duration)
+        public IResultQuery<TOutput> UseCache(string cacheKey = null, TimeSpan? duration = null)
         {
             _cacheKey = cacheKey;
             _cacheDuration = duration;
@@ -59,7 +56,7 @@ namespace Kassandra.Connector.Sql
 
             if (!string.IsNullOrWhiteSpace(_cacheKey))
             {
-                var output = _cacheRepository.GetEntry<IList<TOutput>>(_cacheKey);
+                IList<TOutput> output = _cacheRepository.GetEntry<IList<TOutput>>(_cacheKey);
                 if (output != null)
                 {
                     return output;
@@ -70,14 +67,16 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                var reader = Command.ExecuteReader();
+                IDataReader reader = Command.ExecuteReader();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
-                var output = _mapper.MapToList(new SqlDataReader(reader));
+                IList<TOutput> output = _mapper.MapToList(new SqlDataReader(reader));
 
-                if (!string.IsNullOrWhiteSpace(_cacheKey))
+                string cacheKey = _cacheKey;
+                if (string.IsNullOrWhiteSpace(cacheKey))
                 {
-                    _cacheRepository.Insert(_cacheKey, output, _cacheDuration, CacheItemPriority.Default);
+                    cacheKey = Query.ToLower();
                 }
+                _cacheRepository.Insert(cacheKey, output, _cacheDuration ?? TimeSpan.FromHours(1));
 
                 return output;
             }
@@ -107,7 +106,7 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                var reader = Command.ExecuteReader();
+                IDataReader reader = Command.ExecuteReader();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
                 return _mapper.Map(new SqlDataReader(reader));
             }
@@ -132,7 +131,7 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                var ret = (TOutput) Command.ExecuteScalar();
+                TOutput ret = (TOutput) Command.ExecuteScalar();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
                 return ret;
             }
