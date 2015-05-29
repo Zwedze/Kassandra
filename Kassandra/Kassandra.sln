@@ -18,6 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kassandra.Connector.Sql.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{9F2EAC30-71C4-4F7C-BDD8-D1E8D1A65BB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kassandra.Users.Core", "Kassandra.Users.Core\Kassandra.Users.Core.csproj", "{BA510B60-6298-41AA-8B5C-83D3671F5A57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kassandra.Users.Sql", "Kassandra.Users.Sql\Kassandra.Users.Sql.csproj", "{5DDF9776-8A51-4658-9D70-811BC946D619}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kassandra.Users", "Kassandra.Users", "{760F97BB-4848-4D79-8A71-197678E88999}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,11 +42,21 @@ Global
 		{07726572-362F-49FB-B416-695116BC0FE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07726572-362F-49FB-B416-695116BC0FE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07726572-362F-49FB-B416-695116BC0FE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA510B60-6298-41AA-8B5C-83D3671F5A57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA510B60-6298-41AA-8B5C-83D3671F5A57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA510B60-6298-41AA-8B5C-83D3671F5A57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA510B60-6298-41AA-8B5C-83D3671F5A57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DDF9776-8A51-4658-9D70-811BC946D619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DDF9776-8A51-4658-9D70-811BC946D619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DDF9776-8A51-4658-9D70-811BC946D619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DDF9776-8A51-4658-9D70-811BC946D619}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{07726572-362F-49FB-B416-695116BC0FE4} = {9F2EAC30-71C4-4F7C-BDD8-D1E8D1A65BB5}
+		{BA510B60-6298-41AA-8B5C-83D3671F5A57} = {760F97BB-4848-4D79-8A71-197678E88999}
+		{5DDF9776-8A51-4658-9D70-811BC946D619} = {760F97BB-4848-4D79-8A71-197678E88999}
 	EndGlobalSection
 EndGlobal
