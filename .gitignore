@@ -187,8 +187,8 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
-*.nuspec
+#*.nuspec
 Kassandra/packages/
-*.bat
+#*.bat
 *.nupkg
 Kassandra/Kassandra.Connector.Sql.Test/App.config
