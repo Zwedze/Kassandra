@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Kassandra.Core.Components
 {
-    public class MappingItem<TMappingOutput>
+    internal class MappingItem<TMappingOutput>
     {
         public MappingItem(Expression<Func<TMappingOutput, object>> expression, string readerKey)
         {

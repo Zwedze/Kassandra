@@ -60,13 +60,13 @@ namespace Kassandra.Users.Sql
         {
             return _context.BuildQuery<User>("pr_Users_GetByID")
                 .Parameter("@UserID", id)
-                .Mapper(new ExpressionMapper<User>(
-                    new MappingItem<User>(x => x.Active, "Active"),
-                    new MappingItem<User>(x => x.Email, "Email"),
-                    new MappingItem<User>(x => x.Id, "ID"),
-                    new MappingItem<User>(x => x.Password, "Password"),
-                    new MappingItem<User>(x => x.Uid, "UID"),
-                    new MappingItem<User>(x => x.Username, "Username"))
+                .Mapper(new ExpressionMapper<User>()
+                    .Bind(x => x.Active, "Active")
+                    .Bind(x => x.Email, "Email")
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Password, "Password")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Username, "Username")
                 )
                 .QuerySingle();
         }
@@ -75,13 +75,13 @@ namespace Kassandra.Users.Sql
         {
             return _context.BuildQuery<User>("pr_Users_GetByUID")
                 .Parameter("@UserUID", uid)
-                .Mapper(new ExpressionMapper<User>(
-                    new MappingItem<User>(x => x.Active, "Active"),
-                    new MappingItem<User>(x => x.Email, "Email"),
-                    new MappingItem<User>(x => x.Id, "ID"),
-                    new MappingItem<User>(x => x.Password, "Password"),
-                    new MappingItem<User>(x => x.Uid, "UID"),
-                    new MappingItem<User>(x => x.Username, "Username"))
+                .Mapper(new ExpressionMapper<User>()
+                    .Bind(x => x.Active, "Active")
+                    .Bind(x => x.Email, "Email")
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Password, "Password")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Username, "Username")
                 )
                 .QuerySingle();
         }
@@ -90,13 +90,13 @@ namespace Kassandra.Users.Sql
         {
             return _context.BuildQuery<User>("pr_Users_GetByUsername")
                 .Parameter("@Username", username)
-                .Mapper(new ExpressionMapper<User>(
-                    new MappingItem<User>(x => x.Active, "Active"),
-                    new MappingItem<User>(x => x.Email, "Email"),
-                    new MappingItem<User>(x => x.Id, "ID"),
-                    new MappingItem<User>(x => x.Password, "Password"),
-                    new MappingItem<User>(x => x.Uid, "UID"),
-                    new MappingItem<User>(x => x.Username, "Username"))
+                .Mapper(new ExpressionMapper<User>()
+                    .Bind(x => x.Active, "Active")
+                    .Bind(x => x.Email, "Email")
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Password, "Password")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Username, "Username")
                 )
                 .QuerySingle();
         }
@@ -105,13 +105,13 @@ namespace Kassandra.Users.Sql
         {
             return _context.BuildQuery<User>("pr_Users_GetByEmail")
                 .Parameter("@Email", email)
-                .Mapper(new ExpressionMapper<User>(
-                    new MappingItem<User>(x => x.Active, "Active"),
-                    new MappingItem<User>(x => x.Email, "Email"),
-                    new MappingItem<User>(x => x.Id, "ID"),
-                    new MappingItem<User>(x => x.Password, "Password"),
-                    new MappingItem<User>(x => x.Uid, "UID"),
-                    new MappingItem<User>(x => x.Username, "Username"))
+                .Mapper(new ExpressionMapper<User>()
+                    .Bind(x => x.Active, "Active")
+                    .Bind(x => x.Email, "Email")
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Password, "Password")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Username, "Username")
                 )
                 .QuerySingle();
         }
@@ -120,13 +120,13 @@ namespace Kassandra.Users.Sql
         {
             return _context.BuildQuery<User>("pr_Users_GetByRole")
                 .Parameter("@RoleID", roleId)
-                .Mapper(new ExpressionMapper<User>(
-                    new MappingItem<User>(x => x.Active, "Active"),
-                    new MappingItem<User>(x => x.Email, "Email"),
-                    new MappingItem<User>(x => x.Id, "ID"),
-                    new MappingItem<User>(x => x.Password, "Password"),
-                    new MappingItem<User>(x => x.Uid, "UID"),
-                    new MappingItem<User>(x => x.Username, "Username"))
+                .Mapper(new ExpressionMapper<User>()
+                    .Bind(x => x.Active, "Active")
+                    .Bind(x => x.Email, "Email")
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Password, "Password")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Username, "Username")
                 )
                 .QueryMany();
         }
@@ -134,13 +134,13 @@ namespace Kassandra.Users.Sql
         public IEnumerable<User> GetAll()
         {
             return _context.BuildQuery<User>("pr_Users_GetAll")
-                .Mapper(new ExpressionMapper<User>(
-                    new MappingItem<User>(x => x.Active, "Active"),
-                    new MappingItem<User>(x => x.Email, "Email"),
-                    new MappingItem<User>(x => x.Id, "ID"),
-                    new MappingItem<User>(x => x.Password, "Password"),
-                    new MappingItem<User>(x => x.Uid, "UID"),
-                    new MappingItem<User>(x => x.Username, "Username"))
+                .Mapper(new ExpressionMapper<User>()
+                    .Bind(x => x.Active, "Active")
+                    .Bind(x => x.Email, "Email")
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Password, "Password")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Username, "Username")
                 )
                 .QueryMany();
         }
@@ -164,13 +164,13 @@ namespace Kassandra.Users.Sql
             return _context.BuildQuery<User>("pr_Users_GetByUsernameByPassword")
                 .Parameter("@Username", username)
                 .Parameter("@Password", password)
-                .Mapper(new ExpressionMapper<User>(
-                    new MappingItem<User>(x => x.Active, "Active"),
-                    new MappingItem<User>(x => x.Email, "Email"),
-                    new MappingItem<User>(x => x.Id, "ID"),
-                    new MappingItem<User>(x => x.Password, "Password"),
-                    new MappingItem<User>(x => x.Uid, "UID"),
-                    new MappingItem<User>(x => x.Username, "Username"))
+                .Mapper(new ExpressionMapper<User>()
+                    .Bind(x => x.Active, "Active")
+                    .Bind(x => x.Email, "Email")
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Password, "Password")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Username, "Username")
                 )
                 .QuerySingle();
         }
@@ -180,13 +180,13 @@ namespace Kassandra.Users.Sql
             return _context.BuildQuery<User>("pr_Users_GetByEmailByPassword")
                 .Parameter("@Email", email)
                 .Parameter("@Password", password)
-                .Mapper(new ExpressionMapper<User>(
-                    new MappingItem<User>(x => x.Active, "Active"),
-                    new MappingItem<User>(x => x.Email, "Email"),
-                    new MappingItem<User>(x => x.Id, "ID"),
-                    new MappingItem<User>(x => x.Password, "Password"),
-                    new MappingItem<User>(x => x.Uid, "UID"),
-                    new MappingItem<User>(x => x.Username, "Username"))
+                .Mapper(new ExpressionMapper<User>()
+                    .Bind(x => x.Active, "Active")
+                    .Bind(x => x.Email, "Email")
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Password, "Password")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Username, "Username")
                 )
                 .QuerySingle();
         }

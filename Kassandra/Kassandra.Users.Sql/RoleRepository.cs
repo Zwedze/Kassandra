@@ -65,11 +65,11 @@ namespace Kassandra.Users.Sql
         {
             return _context.BuildQuery<Role>("pr_Roles_GetByID")
                 .Parameter("@ID", roleId)
-                .Mapper(new ExpressionMapper<Role>(
-                    new MappingItem<Role>(x => x.Id, "ID"),
-                    new MappingItem<Role>(x => x.Uid, "UID"),
-                    new MappingItem<Role>(x => x.Name, "Name")
-                ))
+                .Mapper(new ExpressionMapper<Role>()
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Name, "Name")
+                )
                 .QuerySingle();
         }
 
@@ -77,11 +77,11 @@ namespace Kassandra.Users.Sql
         {
             return _context.BuildQuery<Role>("pr_Roles_GetByUID")
                 .Parameter("@Uid", roleUid)
-                .Mapper(new ExpressionMapper<Role>(
-                    new MappingItem<Role>(x => x.Id, "ID"),
-                    new MappingItem<Role>(x => x.Uid, "UID"),
-                    new MappingItem<Role>(x => x.Name, "Name")
-                ))
+                .Mapper(new ExpressionMapper<Role>()
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Name, "Name")
+                )
                 .QuerySingle();
         }
 
@@ -89,11 +89,11 @@ namespace Kassandra.Users.Sql
         {
             return _context.BuildQuery<Role>("pr_Roles_GetByUserID")
                 .Parameter("@UserID", userId)
-                .Mapper(new ExpressionMapper<Role>(
-                    new MappingItem<Role>(x => x.Id, "ID"),
-                    new MappingItem<Role>(x => x.Uid, "UID"),
-                    new MappingItem<Role>(x => x.Name, "Name")
-                ))
+                .Mapper(new ExpressionMapper<Role>()
+                    .Bind(x => x.Id, "ID")
+                    .Bind(x => x.Uid, "UID")
+                    .Bind(x => x.Name, "Name")
+                )
                 .QueryMany();
         }
 
