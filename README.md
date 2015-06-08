@@ -14,7 +14,9 @@ Each Connector package contains a factory. The namespace of the connectors facto
 #### IQuery
 This interface is built using 'fluent' approach. 
 
-**Parameter** method defines a parameter of the query item.
+**Parameter** method defines a parameter of the query item. 
+
+A condition can be defined to check if the parameter has to be added or not. This case is useful when using parameters that has to be defined in some cases without embracing the IQuery instance in an id clause. So the aim of this is to keep the code as clean as possible using FluentApi approach.
 
 **MustCatchExceptions** can be invoked. When used all exceptions throwed in the query execution path will be catched and no information will be available for tracing and debuging. 
 
@@ -29,15 +31,21 @@ Note that the **Error** method is used in the *catch(Exception)* regardless the 
 #### IResultQuery
 This interface extends the IQuery interface and add methods used in an 'output' context.
 
-**UseCache** will check in the cache if the provided cacheKey exists and use its content as direct result whitout calling the database behind the query. A cache duration can be defined using a *Timespan*
+**UseCache** will check in the cache if the provided cacheKey exists and use its content as direct result whitout calling the database behind the query. A cache duration can be defined using a *Timespan*.
+If not value are defined, the cacheKey will be computed based on the command name
 **Mapper** defines the mapper used when an item is cast from a **IResultReader** to an output type.
 
-A mapper **must** be defined in an IResultQuery, otherwise an Exception is throwed and the query will fail.
+A mapper **must** be defined for an IResultQuery, otherwise an Exception is throwed and the query will fail.
 
 **QueryMany**, **QuerySingle**, **QueryScalar** will send the query and return the result using the IMapper item defined from the **Mapper** command.
 
+#### ITransaction
+Call **Commit** to perform all queries enqued using **AddQuery**. If everything went ok, no exception are throwed. Otherwise, a Rollback must be performed.
+
+The **ITransaction.Commit()** must be included in a try-catch clause with a rollback statement in the catch clause.
+
 ## Usage
-In the examples below I will illustrate how to use the framework in different situation
+The examples below illustrate how to use the framework in different situations
 ### Queries samples
 ``` C#
 public class MonsterManager
@@ -50,36 +58,83 @@ public class MonsterManager
 		_context = **Kassandra.Connector.Sql.Factories.SqlContextFactory.Instance.**GetContext(connectionString);
 	}
 
+	#region Get
+
+	// Get without cache
 	public IList<Monster> GetAll()
-	{
-		var cacheKey = string.Format("{0}-GetAll", GetType().Name);
-		
+	{		
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
-			.Mapper(MonsterMapper)
-			.UseCache(cacheKey, TimeSpan.FromHours(1))
-			.ConnectionOpening(args => _logger.Trace("Connection will be opened"))
-			.ConnectionOpened(args => _logger.Trace("Connection is opened"))
-			.ConnectionClosing(args => _logger.Trace("Connection will be closed"))
-			.ConnectionClosed(args => _logger.Trace("Connection is closed"))
-			.QueryExecuting(args => _logger.Trace("Query will be executed"))
-			.QueryExecuted(args => _logger.Trace("Query is executed"))
-			.Error(args => _logger.Error(string.Format("An error occured: {0}", args.Exception.Message))
-			.MustCatchExceptions()
+			.Mapper(new ExpressionMapper<Monster>(
+                new MappingItem<Monster>(x => x.Name, "Name"),
+                new MappingItem<Monster>(x => x.Power, "Strength"),
+                new MappingItem<Monster>(x => x.Id, "ID"),
+                new MappingItem<Monster>(x => x.Uid, "UID")
+            )
 			.QueryMany();
 	}
 
-	public Monster Get(int id)
-	{
-		var cacheKey = string.Format("{0}-Get-{1}", GetType().Name, id);
-		
+	// Get with cache
+	public IList<Monster> GetAllCache()
+	{		
 		return _context
-			.BuildQuery<Monster>("pr_Monsters_GetByID")
-			.Parameter("@MonsterID", id)
-			.Mapper(MonsterMapper)
-			.UseCache(cacheKey, TimeSpan.FromHours(1))
-			.QuerySingle();
+			.BuildQuery<Monster>("proc_Monster_GetAll")
+			.Mapper(new ExpressionMapper<Monster>(
+                new MappingItem<Monster>(x => x.Name, "Name"),
+                new MappingItem<Monster>(x => x.Power, "Strength"),
+                new MappingItem<Monster>(x => x.Id, "ID"),
+                new MappingItem<Monster>(x => x.Uid, "UID")
+            )
+			.UseCache()
+			.QueryMany();
 	}
+
+	// Get with cachekey
+	public IList<Monster> GetAllCacheKeyDefined()
+	{		
+		return _context
+			.BuildQuery<Monster>("proc_Monster_GetAll")
+			.Mapper(new ExpressionMapper<Monster>(
+                new MappingItem<Monster>(x => x.Name, "Name"),
+                new MappingItem<Monster>(x => x.Power, "Strength"),
+                new MappingItem<Monster>(x => x.Id, "ID"),
+                new MappingItem<Monster>(x => x.Uid, "UID")
+            )
+			.UseCache("Monster-GetAll")
+			.QueryMany();
+	}
+
+	// Get with cachekey and duration
+	public IList<Monster> GetAllCacheKeyDefined()
+	{		
+		return _context
+			.BuildQuery<Monster>("proc_Monster_GetAll")
+			.Mapper(new ExpressionMapper<Monster>(
+                new MappingItem<Monster>(x => x.Name, "Name"),
+                new MappingItem<Monster>(x => x.Power, "Strength"),
+                new MappingItem<Monster>(x => x.Id, "ID"),
+                new MappingItem<Monster>(x => x.Uid, "UID")
+            )
+			.UseCache("Monster-GetAll", TimeSpan.FromHours(2))
+			.QueryMany();
+	}
+
+	// Get with duration
+	public IList<Monster> GetAllCacheKeyDefined()
+	{		
+		return _context
+			.BuildQuery<Monster>("proc_Monster_GetAll")
+			.Mapper(new ExpressionMapper<Monster>(
+                new MappingItem<Monster>(x => x.Name, "Name"),
+                new MappingItem<Monster>(x => x.Power, "Strength"),
+                new MappingItem<Monster>(x => x.Id, "ID"),
+                new MappingItem<Monster>(x => x.Uid, "UID")
+            )
+			.UseCache(duration: TimeSpan.FromHours(2))
+			.QueryMany();
+	}
+
+	#endregion
 	
 	public void Insert(Monster monster)
 	{
@@ -90,23 +145,37 @@ public class MonsterManager
 			.ExecuteNonQuery();
 	}
 
-	#region Mappers
-
-	static MonsterManager()
+	public int InsertAndGetId(Monster monster)
 	{
-		MonsterMapper = new FunctionMapper<Monster>(reader =>
-		{
-			return new Monster
-			{
-				Id = reader.ValueAs<int>("ID"),
-				Name = reader.ValueAs<string>("Name"),
-				Power = reader.ValueAs<int>("Power"),
-				ImageUrl = reader.ValueAs<string>("Image")
-			};
-		});
+		return _context.BuildQuery<int>(@"INSERT INTO Monsters (Name, Power, Image) OUTPUT Inserted.ID VALUES (@Name, @Power, @Image)", isCommand: false)
+			.Parameter("@Name", monster.Name)
+			.Parameter("@Power", monster.Power)
+			.Parameter("@Image", monster.Image)
+			.QueryScalar();
 	}
 
-	private static readonly IMapper<Monster> MonsterMapper;
+	#region Insert using transactions
+
+	public void DestroyCity(int cityId){
+		ITransaction transaction = _context.BuildTransaction("monster_destroy_city");
+
+        IQuery removeMonstersFromCity = _context.BuildQuery("DELETE FROM MonstersCity WHERE CityID = @CityID")
+            .Parameter("@CityID", cityId);
+        IQuery removeCity = _context.BuildQuery("DELETE FROM Cities WHERE ID = @CityID")
+            .Parameter("@CityID", cityId);
+
+        transaction.AddQuery(removeMonstersFromCity);
+        transaction.AddQuery(removeCity);
+
+        try
+        {
+            transaction.Commit();
+        }
+        catch (Exception)
+        {
+            transaction.Rollback();
+        }
+	}
 
 	#endregion
 }
