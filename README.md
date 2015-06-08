@@ -65,11 +65,11 @@ public class MonsterManager
 	{		
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
-			.Mapper(new ExpressionMapper<Monster>(
-                new MappingItem<Monster>(x => x.Name, "Name"),
-                new MappingItem<Monster>(x => x.Power, "Strength"),
-                new MappingItem<Monster>(x => x.Id, "ID"),
-                new MappingItem<Monster>(x => x.Uid, "UID")
+			.Mapper(new ExpressionMapper<Monster>()
+				.Bind(x => x.Name, "Name")
+                .Bind(x => x.Power, "Strength")
+                .Bind(x => x.Id, "ID")
+                .Bind(x => x.Uid, "UID")
             )
 			.QueryMany();
 	}
@@ -80,10 +80,10 @@ public class MonsterManager
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
 			.Mapper(new ExpressionMapper<Monster>(
-                new MappingItem<Monster>(x => x.Name, "Name"),
-                new MappingItem<Monster>(x => x.Power, "Strength"),
-                new MappingItem<Monster>(x => x.Id, "ID"),
-                new MappingItem<Monster>(x => x.Uid, "UID")
+                .Bind(x => x.Name, "Name")
+                .Bind(x => x.Power, "Strength")
+                .Bind(x => x.Id, "ID")
+                .Bind(x => x.Uid, "UID")
             )
 			.UseCache()
 			.QueryMany();
@@ -95,10 +95,10 @@ public class MonsterManager
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
 			.Mapper(new ExpressionMapper<Monster>(
-                new MappingItem<Monster>(x => x.Name, "Name"),
-                new MappingItem<Monster>(x => x.Power, "Strength"),
-                new MappingItem<Monster>(x => x.Id, "ID"),
-                new MappingItem<Monster>(x => x.Uid, "UID")
+                .Bind(x => x.Name, "Name")
+                .Bind(x => x.Power, "Strength")
+                .Bind(x => x.Id, "ID")
+                .Bind(x => x.Uid, "UID")
             )
 			.UseCache("Monster-GetAll")
 			.QueryMany();
@@ -110,10 +110,10 @@ public class MonsterManager
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
 			.Mapper(new ExpressionMapper<Monster>(
-                new MappingItem<Monster>(x => x.Name, "Name"),
-                new MappingItem<Monster>(x => x.Power, "Strength"),
-                new MappingItem<Monster>(x => x.Id, "ID"),
-                new MappingItem<Monster>(x => x.Uid, "UID")
+                .Bind(x => x.Name, "Name")
+                .Bind(x => x.Power, "Strength")
+                .Bind(x => x.Id, "ID")
+                .Bind(x => x.Uid, "UID")
             )
 			.UseCache("Monster-GetAll", TimeSpan.FromHours(2))
 			.QueryMany();
@@ -125,10 +125,10 @@ public class MonsterManager
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
 			.Mapper(new ExpressionMapper<Monster>(
-                new MappingItem<Monster>(x => x.Name, "Name"),
-                new MappingItem<Monster>(x => x.Power, "Strength"),
-                new MappingItem<Monster>(x => x.Id, "ID"),
-                new MappingItem<Monster>(x => x.Uid, "UID")
+                .Bind(x => x.Name, "Name")
+                .Bind(x => x.Power, "Strength")
+                .Bind(x => x.Id, "ID")
+                .Bind(x => x.Uid, "UID")
             )
 			.UseCache(duration: TimeSpan.FromHours(2))
 			.QueryMany();
