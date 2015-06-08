@@ -79,7 +79,7 @@ public class MonsterManager
 	{		
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
-			.Mapper(new ExpressionMapper<Monster>(
+			.Mapper(new ExpressionMapper<Monster>()
                 .Bind(x => x.Name, "Name")
                 .Bind(x => x.Power, "Strength")
                 .Bind(x => x.Id, "ID")
@@ -94,7 +94,7 @@ public class MonsterManager
 	{		
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
-			.Mapper(new ExpressionMapper<Monster>(
+			.Mapper(new ExpressionMapper<Monster>()
                 .Bind(x => x.Name, "Name")
                 .Bind(x => x.Power, "Strength")
                 .Bind(x => x.Id, "ID")
@@ -109,7 +109,7 @@ public class MonsterManager
 	{		
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
-			.Mapper(new ExpressionMapper<Monster>(
+			.Mapper(new ExpressionMapper<Monster>()
                 .Bind(x => x.Name, "Name")
                 .Bind(x => x.Power, "Strength")
                 .Bind(x => x.Id, "ID")
@@ -124,7 +124,7 @@ public class MonsterManager
 	{		
 		return _context
 			.BuildQuery<Monster>("proc_Monster_GetAll")
-			.Mapper(new ExpressionMapper<Monster>(
+			.Mapper(new ExpressionMapper<Monster>()
                 .Bind(x => x.Name, "Name")
                 .Bind(x => x.Power, "Strength")
                 .Bind(x => x.Id, "ID")
