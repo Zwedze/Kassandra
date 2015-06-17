@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Text;
 using Kassandra.Core;
 using Kassandra.Core.Models.Query;
@@ -60,7 +59,7 @@ namespace Kassandra.Connector.Sql
 
             if (_useCache)
             {
-                IList<TOutput> output = _cacheRepository.GetEntry<IList<TOutput>>(_cacheKey);
+                var output = _cacheRepository.GetEntry<IList<TOutput>>(GetCacheKey());
                 if (output != null)
                 {
                     return output;
@@ -71,9 +70,9 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                IDataReader reader = Command.ExecuteReader();
+                var reader = Command.ExecuteReader();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
-                IList<TOutput> output = _mapper.MapToList(new SqlDataReader(reader));
+                var output = _mapper.MapToList(new SqlDataReader(reader));
 
                 if (_useCache)
                 {
@@ -106,7 +105,7 @@ namespace Kassandra.Connector.Sql
 
             if (_useCache)
             {
-                TOutput output = _cacheRepository.GetEntry<TOutput>(_cacheKey);
+                var output = _cacheRepository.GetEntry<TOutput>(GetCacheKey());
                 if (!output.Equals(default(TOutput)))
                 {
                     return output;
@@ -117,9 +116,9 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                IDataReader reader = Command.ExecuteReader();
+                var reader = Command.ExecuteReader();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
-                TOutput output = _mapper.Map(new SqlDataReader(reader));
+                var output = _mapper.Map(new SqlDataReader(reader));
 
                 if (_useCache)
                 {
@@ -147,7 +146,7 @@ namespace Kassandra.Connector.Sql
         {
             if (_useCache)
             {
-                TOutput output = _cacheRepository.GetEntry<TOutput>(_cacheKey);
+                var output = _cacheRepository.GetEntry<TOutput>(GetCacheKey());
                 if (!output.Equals(default(TOutput)))
                 {
                     return output;
@@ -158,7 +157,7 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                TOutput output = (TOutput) Command.ExecuteScalar();
+                var output = (TOutput) Command.ExecuteScalar();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
                 if (_useCache)
                 {
@@ -180,6 +179,21 @@ namespace Kassandra.Connector.Sql
             {
                 CloseConnection();
             }
+        }
+
+        private string GetCacheKey()
+        {
+            var cacheKey = _cacheKey;
+            if (string.IsNullOrWhiteSpace(cacheKey))
+            {
+                var cacheKeyBuilder = new StringBuilder(Query.ToLower());
+                foreach (var p in Parameters)
+                {
+                    cacheKeyBuilder.Append(string.Format("[{0}-{1}]", p.Key, p.Value));
+                }
+            }
+
+            return cacheKey;
         }
 
         #region Events
@@ -234,20 +248,5 @@ namespace Kassandra.Connector.Sql
         }
 
         #endregion
-
-        private string GetCacheKey()
-        {
-            string cacheKey = _cacheKey;
-            if (string.IsNullOrWhiteSpace(cacheKey))
-            {
-                StringBuilder cacheKeyBuilder = new StringBuilder(Query.ToLower());
-                foreach (KeyValuePair<string, object> p in Parameters)
-                {
-                    cacheKeyBuilder.Append(string.Format("[{0}-{1}]", p.Key, p.Value));
-                }
-            }
-
-            return cacheKey;
-        }
     }
 }
