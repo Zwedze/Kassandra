@@ -8,9 +8,9 @@ namespace Kassandra.Core.Components
     {
         private readonly IList<MappingItem<TOutput>> _mappings;
 
-        public ExpressionMapper(params MappingItem<TOutput>[] mappings)
+        public ExpressionMapper()
         {
-            _mappings = mappings;
+            _mappings = new List<MappingItem<TOutput>>();
         }
 
         public TOutput Map(IResultReader reader)
@@ -45,6 +45,13 @@ namespace Kassandra.Core.Components
             }
 
             return output;
+        }
+
+        public ExpressionMapper<TOutput> Bind(Expression<Func<TOutput, object>> expression, string readerKey)
+        {
+            _mappings.Add(new MappingItem<TOutput>(expression, readerKey));
+
+            return this;
         }
     }
 }
