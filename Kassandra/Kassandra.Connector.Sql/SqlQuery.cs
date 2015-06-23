@@ -40,7 +40,7 @@ namespace Kassandra.Connector.Sql
 
             IDbDataParameter parameter = Command.CreateParameter();
             parameter.ParameterName = parameterName;
-            parameter.Value = parameterValue;
+            parameter.Value = parameterValue ?? DBNull.Value;
             Command.Parameters.Add(parameter);
 
             Parameters.Add(parameterName, parameterValue);
