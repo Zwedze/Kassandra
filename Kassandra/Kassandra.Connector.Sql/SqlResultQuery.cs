@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using Kassandra.Core;
 using Kassandra.Core.Models.Query;
@@ -59,7 +60,7 @@ namespace Kassandra.Connector.Sql
 
             if (_useCache)
             {
-                var output = _cacheRepository.GetEntry<IList<TOutput>>(GetCacheKey());
+                IList<TOutput> output = _cacheRepository.GetEntry<IList<TOutput>>(GetCacheKey());
                 if (output != null)
                 {
                     return output;
@@ -70,9 +71,9 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                var reader = Command.ExecuteReader();
+                IDataReader reader = Command.ExecuteReader();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
-                var output = _mapper.MapToList(new SqlDataReader(reader));
+                IList<TOutput> output = _mapper.MapToList(new SqlDataReader(reader));
 
                 if (_useCache)
                 {
@@ -105,7 +106,7 @@ namespace Kassandra.Connector.Sql
 
             if (_useCache)
             {
-                var output = _cacheRepository.GetEntry<TOutput>(GetCacheKey());
+                TOutput output = _cacheRepository.GetEntry<TOutput>(GetCacheKey());
                 if (!output.Equals(default(TOutput)))
                 {
                     return output;
@@ -116,9 +117,9 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                var reader = Command.ExecuteReader();
+                IDataReader reader = Command.ExecuteReader();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
-                var output = _mapper.Map(new SqlDataReader(reader));
+                TOutput output = _mapper.Map(new SqlDataReader(reader));
 
                 if (_useCache)
                 {
@@ -146,7 +147,7 @@ namespace Kassandra.Connector.Sql
         {
             if (_useCache)
             {
-                var output = _cacheRepository.GetEntry<TOutput>(GetCacheKey());
+                TOutput output = _cacheRepository.GetEntry<TOutput>(GetCacheKey());
                 if (!output.Equals(default(TOutput)))
                 {
                     return output;
@@ -157,7 +158,7 @@ namespace Kassandra.Connector.Sql
             try
             {
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
-                var output = (TOutput) Command.ExecuteScalar();
+                TOutput output = (TOutput) Command.ExecuteScalar();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
                 if (_useCache)
                 {
@@ -183,14 +184,15 @@ namespace Kassandra.Connector.Sql
 
         private string GetCacheKey()
         {
-            var cacheKey = _cacheKey;
+            string cacheKey = _cacheKey;
             if (string.IsNullOrWhiteSpace(cacheKey))
             {
-                var cacheKeyBuilder = new StringBuilder(Query.ToLower());
-                foreach (var p in Parameters)
+                StringBuilder cacheKeyBuilder = new StringBuilder(Query.ToLower());
+                foreach (KeyValuePair<string, object> p in Parameters)
                 {
                     cacheKeyBuilder.Append(string.Format("[{0}-{1}]", p.Key, p.Value));
                 }
+                cacheKey = cacheKeyBuilder.ToString();
             }
 
             return cacheKey;
