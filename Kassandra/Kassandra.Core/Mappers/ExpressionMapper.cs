@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Kassandra.Core.Components;
 
-namespace Kassandra.Core.Components
+namespace Kassandra.Core.Mappers
 {
     public class ExpressionMapper<TOutput> : IMapper<TOutput>
     {
@@ -37,13 +39,12 @@ namespace Kassandra.Core.Components
         private TOutput MapItem(IResultReader reader)
         {
             TOutput output = Activator.CreateInstance<TOutput>();
-            foreach (MappingItem<TOutput> mappingItem in _mappings)
+            Parallel.ForEach(_mappings, mappingItem =>
             {
                 Expression<Func<TOutput, object>> expression = mappingItem.Expression;
-                LambdaExtensions.SetPropertyValue(output, expression,
-                    reader.ValueAs(expression.GetExpressionType(), mappingItem.ReaderKey));
-            }
-
+                LambdaExtensions.SetPropertyValue(output, expression, reader.ValueAs(expression.GetExpressionType(), mappingItem.ReaderKey));
+            });
+            
             return output;
         }
 

@@ -4,6 +4,7 @@ using Common.Logging;
 using Kassandra.Connector.Sql.Factories;
 using Kassandra.Core;
 using Kassandra.Core.Components;
+using Kassandra.Core.Mappers;
 using Kassandra.Users.Core;
 using Kassandra.Users.Core.Models;
 

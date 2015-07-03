@@ -23,7 +23,7 @@ namespace Kassandra.Core.Mappers
 
         public IList<TOutput> MapToList(IResultReader reader)
         {
-            var list = new List<TOutput>();
+            IList<TOutput> list = new List<TOutput>();
             while (reader.Read())
             {
                 list.Add(_mappingFunction.Invoke(reader));
