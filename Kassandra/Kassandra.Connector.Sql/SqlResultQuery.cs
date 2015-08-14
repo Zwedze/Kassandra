@@ -73,7 +73,9 @@ namespace Kassandra.Connector.Sql
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
                 IDataReader reader = Command.ExecuteReader();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
+                OnMappingExecutingHandler();
                 IList<TOutput> output = _mapper.MapToList(new SqlDataReader(reader));
+                OnMappingExecutedHandler();
 
                 if (_useCache)
                 {
@@ -107,7 +109,7 @@ namespace Kassandra.Connector.Sql
             if (_useCache)
             {
                 TOutput output = _cacheRepository.GetEntry<TOutput>(GetCacheKey());
-                if (!output.Equals(default(TOutput)))
+                if (output != null && !output.Equals(default(TOutput)))
                 {
                     return output;
                 }
@@ -119,7 +121,9 @@ namespace Kassandra.Connector.Sql
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
                 IDataReader reader = Command.ExecuteReader();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
+                OnMappingExecutingHandler();
                 TOutput output = _mapper.Map(new SqlDataReader(reader));
+                OnMappingExecutedHandler();
 
                 if (_useCache)
                 {
@@ -148,7 +152,7 @@ namespace Kassandra.Connector.Sql
             if (_useCache)
             {
                 TOutput output = _cacheRepository.GetEntry<TOutput>(GetCacheKey());
-                if (!output.Equals(default(TOutput)))
+                if (output != null && !output.Equals(default(TOutput)))
                 {
                     return output;
                 }
@@ -242,9 +246,46 @@ namespace Kassandra.Connector.Sql
             return this;
         }
 
+
         public new IResultQuery<TOutput> ConnectionClosed(Action<CloseConnectionEventArgs> args)
         {
             base.ConnectionClosed(args);
+
+            return this;
+        }
+
+        public event Action OnMappingExecuting;
+
+        protected void OnMappingExecutingHandler()
+        {
+            Action handler = OnMappingExecuting;
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
+        public IResultQuery<TOutput> MappingExecuting(Action args)
+        {
+            OnMappingExecuting += args;
+
+            return this;
+        }
+
+        public event Action OnMappingExecuted;
+
+        protected void OnMappingExecutedHandler()
+        {
+            Action handler = OnMappingExecuted;
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
+        public IResultQuery<TOutput> MappingExecuted(Action args)
+        {
+            OnMappingExecuted += args;
 
             return this;
         }

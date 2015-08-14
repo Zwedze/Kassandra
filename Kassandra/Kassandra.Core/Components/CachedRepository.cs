@@ -7,6 +7,10 @@ namespace Kassandra.Core.Components
     {
         public TOutput GetEntry<TOutput>(string cacheKey)
         {
+            if (string.IsNullOrWhiteSpace(cacheKey))
+            {
+                throw new ArgumentException("Cachekey is not defined", "cacheKey");
+            }
             CacheItem cacheItem;
             if ((cacheItem = MemoryCache.Default.GetCacheItem(cacheKey)) != null)
             {
@@ -19,7 +23,15 @@ namespace Kassandra.Core.Components
         public void Insert(string cacheKey, object item, TimeSpan duration,
             CacheItemPriority priority = CacheItemPriority.Default)
         {
-            var cacheItem = new CacheItem(cacheKey, item);
+            if (item == null)
+            {
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(cacheKey))
+            {
+                throw new ArgumentException("Cachekey is not defined", "cacheKey");
+            }
+            CacheItem cacheItem = new CacheItem(cacheKey, item);
 
             MemoryCache.Default.Add(cacheItem, new CacheItemPolicy
             {

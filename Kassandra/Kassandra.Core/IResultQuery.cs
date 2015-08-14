@@ -16,6 +16,8 @@ namespace Kassandra.Core
         new IResultQuery<TOutput> QueryExecuted(Action<QueryExecutionEventArgs> args);
         new IResultQuery<TOutput> ConnectionClosing(Action<CloseConnectionEventArgs> args);
         new IResultQuery<TOutput> ConnectionClosed(Action<CloseConnectionEventArgs> args);
+        IResultQuery<TOutput> MappingExecuting(Action args);
+        IResultQuery<TOutput> MappingExecuted(Action args);
         new IResultQuery<TOutput> MustCatchExceptions();
         IList<TOutput> QueryMany();
         TOutput QuerySingle();

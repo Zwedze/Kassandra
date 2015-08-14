@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Kassandra.Core.Mappers
 {
@@ -26,7 +27,7 @@ namespace Kassandra.Core.Mappers
             IList<TOutput> list = new List<TOutput>();
             while (reader.Read())
             {
-                list.Add(_mappingFunction.Invoke(reader));
+                list.Add(_mappingFunction(reader));
             }
             return list;
         }
