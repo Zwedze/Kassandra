@@ -11,7 +11,6 @@ namespace Kassandra.Connector.Sql
     internal class SqlQuery : BaseQuery
     {
         private readonly SqlConnection _connection;
-        protected IDictionary<string, object> Parameters { get; private set; }
 
         public SqlQuery(SqlConnection connection, string query, bool isStoredProcedure) : base(query)
         {
@@ -28,7 +27,8 @@ namespace Kassandra.Connector.Sql
             Parameters = new Dictionary<string, object>();
         }
 
-        public IDbCommand Command { get; private set; }
+        protected IDictionary<string, object> Parameters { get; }
+        public IDbCommand Command { get; }
         public override sealed ILog Logger { get; protected set; }
 
         public override IQuery Parameter(string parameterName, object parameterValue, bool condition = true)
@@ -50,9 +50,9 @@ namespace Kassandra.Connector.Sql
 
         public override void ExecuteNonQuery()
         {
-            OpenConnection();
             try
             {
+                OpenConnection();
                 OnQueryExecutingHandler(new QueryExecutionEventArgs {Query = this});
                 Command.ExecuteNonQuery();
                 OnQueryExecutedHandler(new QueryExecutionEventArgs {Query = this});
@@ -69,7 +69,19 @@ namespace Kassandra.Connector.Sql
             }
             finally
             {
-                CloseConnection();
+                try
+                {
+                    CloseConnection();
+                }
+                catch (Exception e)
+                {
+                    OnErrorHandler(new QueryErrorEventArgs {Exception = e});
+
+                    if (!CatchExceptions)
+                    {
+                        throw;
+                    }
+                }
             }
         }
 
